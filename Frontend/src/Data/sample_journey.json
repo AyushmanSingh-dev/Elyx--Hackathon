@@ -1,4 +1,4 @@
-// sample_journey.json
+// sample_journey.js
 [
   {
     "type": "message",
@@ -124,3 +124,4 @@
     "relatedToDecision": true
   }
 ]
+
