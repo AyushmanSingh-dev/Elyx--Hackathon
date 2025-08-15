@@ -1,0 +1,126 @@
+// sample_journey.json
+[
+  {
+    "type": "message",
+    "sender": "Rohan",
+    "timestamp": "2025-08-01 10:00",
+    "content": "Ruby, I'm feeling overwhelmed with my ad-hoc health routine. High work stress, and my Garmin HR seems off even on rest days. I need a proper, coordinated plan. My current supplement list is attached.",
+    "pillar": null,
+    "relatedTo": null
+  },
+  {
+    "type": "message",
+    "sender": "Ruby",
+    "timestamp": "2025-08-01 10:05",
+    "content": "Hi Rohan, thank you for sharing this. We understand. Our goal is to bring coordination to your health. I'm flagging your concerns for Dr. Warren to review immediately. We're here to make this seamless for you.",
+    "pillar": null,
+    "relatedTo": "Rohan_Initial"
+  },
+  {
+    "type": "event",
+    "eventId": "onboarding_start",
+    "timestamp": "2025-08-01 10:00",
+    "description": "Member Onboarding Initiated",
+    "details": "Rohan shares medical history and goals."
+  },
+  {
+    "type": "message",
+    "sender": "Dr. Warren",
+    "timestamp": "2025-08-08 14:00",
+    "content": "Rohan, Dr. Warren here. I've reviewed your initial submission. To strategize clinically, we must consolidate your complete medical records. This is non-negotiable for safety. Ruby will manage the process.",
+    "pillar": "Pillar 1",
+    "relatedTo": "Ruby_Welcome",
+    "decisionRationale": "To ensure safety and avoid redundant testing, and establish a clinical-grade strategy."
+  },
+  {
+    "type": "message",
+    "sender": "Rohan",
+    "timestamp": "2025-08-08 14:05",
+    "content": "Acknowledged. Also, I'm thinking about fitness goals. What's the best first step for optimizing my workouts?",
+    "pillar": null,
+    "relatedTo": "DrWarren_Records"
+  },
+  {
+    "type": "message",
+    "sender": "Advik",
+    "timestamp": "2025-08-08 14:10",
+    "content": "Rohan, Advik here. A good first step is a comprehensive movement assessment to understand your baseline and identify any imbalances. Ruby can help schedule this with Rachel. This will inform your personalized exercise plan.",
+    "pillar": "Pillar 4",
+    "relatedTo": "Rohan_Fitness",
+    "decisionRationale": "To establish a baseline for personalized exercise programming and identify imbalances."
+  },
+  {
+    "type": "event",
+    "eventId": "records_requested",
+    "timestamp": "2025-08-08 14:00",
+    "description": "Comprehensive Medical Records Requested",
+    "details": "Critical for clinical strategy.",
+    "relatedToDecision": true
+  },
+  {
+    "type": "event",
+    "eventId": "movement_assessment_suggested",
+    "timestamp": "2025-08-08 14:10",
+    "description": "Initial Movement Assessment Suggested",
+    "details": "For personalized exercise plan.",
+    "relatedToDecision": true
+  },
+  {
+    "type": "message",
+    "sender": "Rachel",
+    "timestamp": "2025-08-15 09:00",
+    "content": "Hi Rohan, Rachel here. Given your frequent travel and desk work, let's try a simple 2-minute 'couch stretch' for your lower back pain. It targets hip flexor tightness. Try it and let me know if it helps.",
+    "pillar": "Pillar 4",
+    "relatedTo": "Rohan_Fitness",
+    "decisionRationale": "To address hip flexor tightness from prolonged sitting and travel, a common cause of lower back pain."
+  },
+  {
+    "type": "message",
+    "sender": "Rohan",
+    "timestamp": "2025-08-15 09:10",
+    "content": "The couch stretch helped a bit! Also, for stress, any immediate dietary tips? I struggle with consistent energy.",
+    "pillar": null,
+    "relatedTo": "Rachel_Stretch"
+  },
+  {
+    "type": "message",
+    "sender": "Carla",
+    "timestamp": "2025-08-15 09:15",
+    "content": "Rohan, Carla here. Great to hear about the stretch! For immediate stress support, focus on consistent hydration and mindful eating during your meals, even small ones. Avoiding processed snacks can also help. We'll dive deeper into nutrition soon.",
+    "pillar": "Pillar 3, Pillar 5",
+    "relatedTo": "Rohan_DietQuery"
+  },
+  {
+    "type": "event",
+    "eventId": "couch_stretch_introduced",
+    "timestamp": "2025-08-15 09:00",
+    "description": "Couch Stretch Introduced for Back Pain",
+    "details": "Targeting hip flexors.",
+    "relatedToDecision": true
+  },
+  {
+    "type": "message",
+    "sender": "Ruby",
+    "timestamp": "2025-08-22 11:00",
+    "content": "Rohan, it's time to schedule your Q1 diagnostic panel. This comprehensive test will give us a baseline for your metabolic and hormonal health. We can arrange a phlebotomist to come to your office. Does next Tuesday morning work?",
+    "pillar": "Pillar 1",
+    "relatedTo": null,
+    "decisionRationale": "Full diagnostic test panel every three months is a core program requirement to track progress on biomarkers."
+  },
+  {
+    "type": "message",
+    "sender": "Rohan",
+    "timestamp": "2025-08-22 11:05",
+    "content": "Yes, next Tuesday works. Confirmed. I'm keen to see the numbers, though I'm always a bit skeptical until I see tangible results.",
+    "pillar": null,
+    "relatedTo": "Ruby_DiagnosticSchedule"
+  },
+  {
+    "type": "event",
+    "eventId": "q1_diagnostic_scheduled",
+    "timestamp": "2025-08-22 11:00",
+    "description": "Q1 Diagnostic Panel Scheduled",
+    "details": "Comprehensive baseline tests.",
+    "relatedToDecision": true
+  }
+]
