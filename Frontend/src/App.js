@@ -1,7 +1,12 @@
 // App.js
 import React, { useState, useEffect, useCallback } from 'react';
-import NavItem from './components/NavItem'; // Import the NavItem component
-import sampleJourneyData from '../data/sample_journey.json'; // Import the sample journey data
+// Import the NavItem component.
+// This path assumes NavItem.js is located at: Frontend/src/components/NavItem.js
+import NavItem from './components/NavItem'; 
+// FIXED: Corrected import path for sampleJourneyData.
+// This path assumes sample_journey.json is located at the project root level in the 'Data' folder (e.g., my-elyx-hackathon/Data/sample_journey.json),
+// and App.js is located in 'Frontend/src/App.js'.
+import sampleJourneyData from '../../Data/sample_journey.json'; 
 
 function App() {
   const [activeSection, setActiveSection] = useState('dashboard');
@@ -13,7 +18,11 @@ function App() {
   const [journeyData, setJourneyData] = useState([]);
   const [isGeneratingConversation, setIsGeneratingConversation] = useState(true); // Set to true initially
 
-  // Function to simulate an API call to an LLM for decision explanation
+  // IMPORTANT: Replace this with YOUR ACTUAL RENDER BACKEND URL
+  // You got this URL from Render after your backend deployment was successful (e.g., https://elyx-hackathon-4.onrender.com)
+  const BACKEND_API_BASE_URL = "https://elyx-hackathon-4.onrender.com"; // <-- Update this line with your Render URL!
+
+  // Function to call the backend API for decision explanation
   const handleDecisionQuery = async () => {
     if (!decisionQuery.trim()) {
       setDecisionResponse("Please enter a question about a decision.");
@@ -24,24 +33,31 @@ function App() {
     setDecisionResponse("Thinking...");
 
     try {
-      // This is where you would ideally call your Python backend API
-      // For the hackathon, you could directly integrate Gemini API call here
-      // For now, it uses a mock response based on common queries.
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      let mockResponse = `Based on your question about "${decisionQuery}", Rohan's personalized plan recommends this because we identified a correlation in your recent Whoop data between late-night meetings and reduced deep sleep duration. To mitigate this, blue-light blocking glasses were suggested to improve sleep architecture, thereby supporting your cognitive performance goals.`;
+      // Make a fetch request to your deployed Python backend
+      const response = await fetch(`${BACKEND_API_BASE_URL}/api/explain-decision`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // Send the user's query and the entire journey data as context to the backend
+        body: JSON.stringify({ query: decisionQuery, journeyData: journeyData }),
+      });
 
-      if (decisionQuery.toLowerCase().includes('apo b') || decisionQuery.toLowerCase().includes('apob')) {
-        mockResponse = `The focus on ApoB came from your Q1 diagnostic panel results, which showed an elevated ApoB of 105 mg/dL. Dr. Warren identified this as a primary marker for long-term cardiovascular risk, aligning with your goal to reduce heart disease risk. Dietary interventions led by Carla and exercise adjustments by Rachel were initiated as the primary strategy to lower this marker, with re-testing planned for Q2.`;
-      } else if (decisionQuery.toLowerCase().includes('travel protocol')) {
-        mockResponse = `The comprehensive travel protocol was developed for your frequent international trips, like the one to Tokyo. Advik designed a precise light exposure schedule and Rachel identified suitable gyms near your hotel to maintain your strength program. This proactive approach aims to minimize jet lag and maintain your health routine, ensuring you remain functional and resilient during demanding travel.`;
-      } else if (decisionQuery.toLowerCase().includes('couch stretch')) {
-        mockResponse = `The couch stretch was recommended by Rachel (PT) early in your journey to address lower back pain, which was flagged as a Pillar 4 issue. This pain was likely exacerbated by prolonged sitting during travel. The stretch targets hip flexor tightness, which is a common root cause, and was suggested as a simple, non-invasive first step after you found the seated stretch less effective.`;
+      const data = await response.json();
+
+      if (response.ok) {
+        // If the response is successful, set the explanation
+        setDecisionResponse(data.explanation);
+      } else {
+        // Handle errors from the backend
+        setDecisionResponse(`Error from backend: ${data.error || 'Unknown error'}`);
+        console.error("Backend error response:", data);
       }
-      setDecisionResponse(mockResponse);
 
     } catch (error) {
-      console.error("Error generating decision response:", error);
-      setDecisionResponse("An error occurred while fetching the explanation. Please try again.");
+      // Handle network errors or issues with the fetch request itself
+      console.error("Error calling backend API:", error);
+      setDecisionResponse("An error occurred while connecting to the backend. Please ensure the backend is running and the URL is correct.");
     } finally {
       setIsLoadingDecision(false);
     }
@@ -50,7 +66,7 @@ function App() {
   // Authenticate user and load journey data
   useEffect(() => {
     const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null; 
 
     if (firebaseConfig) {
       import('https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js')
@@ -291,7 +307,6 @@ function App() {
                 <li>**Gender:** Male</li>
                 <li>**Primary Residence:** Singapore</li>
                 <li>**Occupation:** Regional Head of Sales (FinTech)</li>
-                <li>**Personal Assistant:** Sarah Tan</li>
               </ul>
               <p className="text-lg font-medium text-indigo-700 mb-2">Core Goals:</p>
               <ul className="list-disc list-inside space-y-1 text-gray-600 mb-4">
@@ -353,3 +368,4 @@ function App() {
 }
 
 export default App;
+
