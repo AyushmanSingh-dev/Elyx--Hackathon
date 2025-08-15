@@ -6,7 +6,8 @@ import NavItem from './components/NavItem';
 // FIXED: Corrected import path for sampleJourneyData.
 // This path assumes sample_journey.json is located at the project root level in the 'Data' folder (e.g., my-elyx-hackathon/Data/sample_journey.json),
 // and App.js is located in 'Frontend/src/App.js'.
-import sampleJourneyData from '../../Data/sample_journey.json'; 
+import sampleJourneyData from './Data/sample_journey.json';
+
 
 function App() {
   const [activeSection, setActiveSection] = useState('dashboard');
