@@ -7,8 +7,6 @@ export default defineConfig({
     rollupOptions: {
       output: {
         format: 'esm',
-        sourcemap: true,
-        module: true // 👈 This is the fix
       }
     }
   }
