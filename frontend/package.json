@@ -1,3 +1,6 @@
+"engines": {
+  "node": "18.x"
+}
 {
   "name": "elyx-frontend",
   "version": "0.1.0",
