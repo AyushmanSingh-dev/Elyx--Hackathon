@@ -431,5 +431,62 @@
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(React.createElement(App, null));
     </script>
+    <script>
+      const chatBox = document.getElementById("chat-box");
+      const userInput = document.getElementById("user-input");
+      const sendBtn = document.getElementById("send-btn");
+    
+      let chatHistory = [];
+    
+      // Function to render a message in chat
+      function addMessage(sender, text) {
+        const msgDiv = document.createElement("div");
+        msgDiv.className = sender === "user" ? "text-right mb-2" : "text-left mb-2";
+        msgDiv.innerHTML = `
+          <span class="px-3 py-2 inline-block rounded-2xl shadow 
+            ${sender === "user" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"}">
+            ${text}
+          </span>`;
+        chatBox.appendChild(msgDiv);
+        chatBox.scrollTop = chatBox.scrollHeight; // auto-scroll
+      }
+    
+      // Function to send user message to backend
+      async function sendMessage() {
+        const text = userInput.value.trim();
+        if (!text) return;
+    
+        // Show user message
+        addMessage("user", text);
+        userInput.value = "";
+
+        try {
+          const response = await fetch("/api/generate-message", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt: text, chatHistory })
+          });
+    
+          const data = await response.json();
+          const botMessage = data.message || "⚠️ Error: No response";
+    
+          // Update chat history (for context)
+          chatHistory.push({ role: "user", parts: [{ text }] });
+          chatHistory.push({ role: "model", parts: [{ text: botMessage }] });
+        
+          addMessage("bot", botMessage);
+        } catch (err) {
+          console.error("Chat API error:", err);
+          addMessage("bot", "⚠️ Failed to reach AI backend.");
+        }
+      }
+
+      // Event listeners
+      sendBtn.addEventListener("click", sendMessage);
+      userInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") sendMessage();
+      });
+    </script>
+
 </body>
 </html>
