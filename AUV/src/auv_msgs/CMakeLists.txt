@@ -7,6 +7,8 @@ find_package(rosidl_default_generators REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/GateDetection2D.msg"
   "msg/GatePosition3D.msg"
+  "msg/BinDetection2D.msg"
+  "msg/BinPosition3D.msg"
   "msg/MissionState.msg"
   "msg/NavigatorDebug.msg"
 )
