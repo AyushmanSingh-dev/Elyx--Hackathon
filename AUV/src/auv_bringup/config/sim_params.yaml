@@ -1,0 +1,121 @@
+gate_detector_node:
+  ros__parameters:
+    model_relative_path: weights/gate_detector_v2.pt
+    image_topic: /auv/camera/left/image_raw
+    detection_topic: /auv/gate_detection_2d
+    gate_class_ids: [0]
+    confidence_threshold: 0.30
+    iou_threshold: 0.70
+    image_size: 640
+    device: "0"
+    debug_enabled: true
+    debug_directory: ~/auv_ws/debug/yolo
+    log_detection_period_s: 1.0
+
+gate_localizer_node:
+  ros__parameters:
+    detection_topic: /auv/gate_detection_2d
+    disparity_topic: /auv/camera/left/disparity
+    camera_info_topic: /auv/camera/left/camera_info
+    output_topic: /auv/gate_position_3d
+    stereo_baseline_m: 0.12
+    camera_offset_fwd_m: 0.30
+    camera_offset_left_m: 0.06
+    camera_offset_up_m: 0.00
+    confidence_threshold: 0.30
+    detection_timeout_s: 0.50
+    disparity_patch_radius_px: 4
+    min_valid_disparity_pixels: 5
+    disparity_min_px: 0.5
+    center_search_radius_px: 12
+    center_search_step_px: 4
+    min_depth_m: 0.30
+    max_depth_m: 30.0
+    log_throttle_s: 1.0
+
+gate_navigator_node:
+  ros__parameters:
+    gate_position_topic: /auv/gate_position_3d
+    odom_topic: /auv/odom
+    cmd_vel_topic: /auv/cmd_vel
+    mission_state_topic: /auv/mission_state
+    debug_topic: /auv/navigator_debug
+    confidence_threshold: 0.30
+    detection_timeout_s: 1.50
+    commit_distance_m: 5.50
+    commit_ticks_required: 5
+    smoothing_window: 5
+    min_center_samples: 3
+    max_gate_jump_m: 1.00
+    camera_offset_fwd_m: 0.30
+    camera_offset_left_m: 0.06
+    camera_offset_up_m: 0.00
+    track_speed_mps: 0.15
+    cross_speed_mps: 0.20
+    max_yaw_rate_radps: 0.30
+    track_yaw_kp: 1.50
+    final_yaw_kp: 4.00
+    cross_yaw_kp: 2.00
+    align_threshold_rad: 0.027
+    align_ticks_required: 10
+    heave_kp: 1.20
+    heave_max_mps: 0.15
+    heave_align_threshold_m: 0.05
+    cross_heave_max_mps: 0.08
+    standoff_distance_m: 2.00
+    standoff_reach_threshold_m: 0.15
+    cross_overshoot_m: 2.50
+    stop_pause_ticks: 20
+    control_period_s: 0.10
+    log_every_ticks: 10
+
+trail_mapper_node:
+  ros__parameters:
+    odom_topic: /auv/odom
+    gate_topic: /auv/gate_position_3d
+    bin_topic: /auv/bin_position_3d
+    trail_topic: /auv/trail_map
+    marker_topic: /auv/object_markers
+    odom_frame: map
+    min_trail_distance_m: 0.10
+    publish_hz: 1.0
+    confidence_threshold: 0.30
+    cluster_distance_m: 0.75
+    cluster_update_alpha: 0.25
+    max_marker_count: 20
+    camera_offset_fwd_m: 0.30
+    camera_offset_left_m: 0.06
+    camera_offset_up_m: 0.00
+    gate_width_m: 1.524
+    gate_height_m: 1.524
+    gate_thickness_m: 0.05
+    gate_visual_yaw_rad: 0.0
+    gate_marker_alpha: 0.55
+    bin_marker_size_m: 0.30
+    log_directory: ~/auv_ws/mission_logs
+    create_3d_html: true
+    map_dpi: 200
+    log_every_trail_points: 20
+
+mission_logger_node:
+  ros__parameters:
+    state_topic: /auv/mission_state
+    odom_topic: /auv/odom
+    gate_2d_topic: /auv/gate_detection_2d
+    gate_3d_topic: /auv/gate_position_3d
+    navigator_debug_topic: /auv/navigator_debug
+    cmd_vel_topic: /auv/cmd_vel
+    log_directory: ~/auv_ws/mission_logs
+    logging_hz: 1.0
+    flush_every_row: true
+    log_state_transition_immediately: true
+
+mission_monitor_node:
+  ros__parameters:
+    state_topic: /auv/mission_state
+    odom_topic: /auv/odom
+    gate_detection_topic: /auv/gate_detection_2d
+    gate_position_topic: /auv/gate_position_3d
+    navigator_debug_topic: /auv/navigator_debug
+    cmd_vel_topic: /auv/cmd_vel
+    refresh_hz: 1.0
