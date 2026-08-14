@@ -1,6 +1,6 @@
-# AUV Production Stack
+# AUV Software — Production Stack
 
-Production-oriented ROS 2 AUV software stack prepared for simulation-to-real deployment.
+Production-oriented ROS 2 AUV mission stack prepared for simulation-to-real deployment.
 
 ## Core rule
 
@@ -8,24 +8,51 @@ Gazebo-specific interfaces are isolated to the bridge layer. Mission nodes consu
 
 ## Packages
 
-- `auv_bringup` — simulation and real bringup, parameter YAMLs
-- `auv_description` — simulation bridge/model resources
-- `auv_vision` — YOLO gate detection and stereo 3D gate localization
-- `auv_planner` — gate approach/crossing state machine
-- `auv_telemetry` — trail mapping, mission logging, mission monitoring
+- `auv_bringup` — simulation/real launch and parameter YAML
+- `auv_description` — Gazebo model, world and bridge
+- `auv_vision` — YOLO gate detection and stereo gate-centre localization
+- `auv_planner` — center-only gate approach/crossing state machine
+- `auv_telemetry` — clustered trail/object mapping, logging and monitoring
+
+## Build
+
+```bash
+cd AUV
+source /opt/ros/<distro>/setup.bash
+colcon build --symlink-install
+source install/setup.bash
+```
+
+## Simulation
+
+```bash
+ros2 launch auv_bringup sim_mission.launch.py
+```
+
+## Real hardware
+
+Use the same mission nodes and supply the selected real sensor/actuator launch file:
+
+```bash
+ros2 launch auv_bringup mission.launch.py hardware_launch_file:=/path/to/hardware.launch.py
+```
+
+The hardware launch must expose the `/auv/*` contracts such as `/auv/odom`, stereo images/camera info, disparity and `/auv/cmd_vel`.
 
 ## Gate perception contract
 
-YOLO detects the **whole gate as one object**. The detector publishes the bounding-box centre and dimensions. The localizer uses that centre as the gate centre; it does not infer two poles as two independent YOLO objects.
+YOLO class `0` represents the **whole gate**. The detector publishes at most one gate detection per frame:
 
-## Sim-to-real
+`[detected, center_x_px, center_y_px, bbox_width_px, bbox_height_px, confidence, compatibility_flag]`
 
-Simulation:
+The localizer samples stereo disparity around the **YOLO bbox centre** and publishes:
 
-`Gazebo -> bridge.launch.py -> /auv/* -> mission nodes -> sim_params.yaml`
+`[x_fwd, y_left, z_up, confidence]`
 
-Real hardware:
+No pole reconstruction or gate-orientation estimate is required.
 
-`camera/DVL/IMU/thruster drivers -> /auv/* -> same mission nodes -> real_params.yaml`
+## Mapping
 
-Before real deployment, replace the physical stereo baseline and camera mounting offsets in `real_params.yaml`, and provide the real hardware launch file that exposes the `/auv/*` contracts.
+Repeated detections are clustered into one gate marker. The mapper displays a thin cuboid around the estimated gate region rather than drawing a cross for every noisy frame.
+
+See `docs/SIM_TO_REAL.md` for the complete transition contract.
