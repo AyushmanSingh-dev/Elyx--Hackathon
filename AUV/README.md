@@ -14,6 +14,23 @@ Gazebo-specific interfaces are isolated to the bridge layer. Mission nodes consu
 - `auv_planner` — center-only gate approach/crossing state machine
 - `auv_telemetry` — clustered trail/object mapping, logging and monitoring
 
+## Dependencies
+
+Install ROS 2 and Gazebo Sim compatible with your existing AUV environment, then install the Python vision dependencies:
+
+```bash
+cd AUV
+python3 -m pip install -r requirements.txt
+```
+
+The trained model is not committed as a Git binary. Copy your Kaggle `best.pt` checkpoint to:
+
+```text
+src/auv_vision/weights/gate_detector_v2.pt
+```
+
+See `src/auv_vision/weights/README.md` for the expected SHA-256.
+
 ## Build
 
 ```bash
@@ -28,6 +45,8 @@ source install/setup.bash
 ```bash
 ros2 launch auv_bringup sim_mission.launch.py
 ```
+
+The simulation launch starts Gazebo, the bridge, stereo processing and the same mission nodes used by the real-hardware launch. Gazebo-specific `/model/auv_box/*` topics are confined to the bridge.
 
 ## Real hardware
 
