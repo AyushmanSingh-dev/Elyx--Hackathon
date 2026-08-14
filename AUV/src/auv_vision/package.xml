@@ -2,15 +2,15 @@
 <package format="3">
   <name>auv_vision</name>
   <version>0.1.0</version>
-  <description>YOLO gate detection and robust stereo gate-centre localization.</description>
+  <description>YOLO gate/bin detection and robust stereo 3D localization.</description>
   <maintainer email="auv@example.com">AUV Team</maintainer>
   <license>Apache-2.0</license>
   <buildtool_depend>ament_python</buildtool_depend>
   <exec_depend>ament_index_python</exec_depend>
   <exec_depend>rclpy</exec_depend>
+  <exec_depend>auv_msgs</exec_depend>
   <exec_depend>sensor_msgs</exec_depend>
   <exec_depend>stereo_msgs</exec_depend>
-  <exec_depend>std_msgs</exec_depend>
   <exec_depend>cv_bridge</exec_depend>
   <exec_depend>message_filters</exec_depend>
 </package>
