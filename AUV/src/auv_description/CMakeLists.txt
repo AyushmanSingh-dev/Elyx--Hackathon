@@ -3,6 +3,10 @@ project(auv_description)
 
 find_package(ament_cmake REQUIRED)
 
-install(DIRECTORY launch models rviz DESTINATION share/${PROJECT_NAME})
+# Install all simulation assets used by sim_mission.launch.py.
+install(
+  DIRECTORY launch models rviz worlds
+  DESTINATION share/${PROJECT_NAME}
+)
 
 ament_package()
