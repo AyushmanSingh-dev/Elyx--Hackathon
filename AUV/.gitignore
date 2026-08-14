@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+*.log
+*.bag
+*.db3
+build/
+install/
+log/
+.venv/
+venv/
+*.pt
+*.onnx
+*.engine
+mission_logs/
+yolo_debug/
