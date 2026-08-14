@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>auv_telemetry</name>
+  <version>0.1.0</version>
+  <description>Production AUV trail mapping, mission logging and monitoring.</description>
+  <maintainer email="auv@example.com">AUV Team</maintainer>
+  <license>Apache-2.0</license>
+  <buildtool_depend>ament_python</buildtool_depend>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>visualization_msgs</exec_depend>
+</package>
