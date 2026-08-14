@@ -11,10 +11,10 @@ import time
 import cv2
 import rclpy
 from ament_index_python.packages import get_package_share_directory
+from auv_msgs.msg import GateDetection2D
 from cv_bridge import CvBridge
 from rclpy.node import Node
 from sensor_msgs.msg import Image
-from std_msgs.msg import Float32MultiArray
 from ultralytics import YOLO
 
 
@@ -58,19 +58,12 @@ class GateDetectorNode(Node):
                 self.debug_enabled = False
 
         self.cv_bridge = CvBridge()
-        self.detection_pub = self.create_publisher(Float32MultiArray, self.detection_topic, 10)
+        self.detection_pub = self.create_publisher(GateDetection2D, self.detection_topic, 10)
         self.image_sub = self.create_subscription(Image, self.image_topic, self.image_callback, 10)
         self._last_log_time = 0.0
 
-        self.get_logger().info(
-            f'Gate Detector started | image={self.image_topic} | output={self.detection_topic} | '
-            f'classes={self.gate_class_ids} | conf={self.confidence_threshold:.2f}'
-        )
-
     def _publish_no_detection(self):
-        msg = Float32MultiArray()
-        msg.data = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-        self.detection_pub.publish(msg)
+        self.detection_pub.publish(GateDetection2D(detected=False))
 
     def _log_throttled(self, level, text):
         if self.log_detection_period_s == 0.0:
@@ -111,7 +104,6 @@ class GateDetectorNode(Node):
             return
 
         result = results[0]
-
         if self.debug_enabled:
             try:
                 debug_path = os.path.join(self.debug_directory, 'latest_detection.jpg')
@@ -131,7 +123,7 @@ class GateDetectorNode(Node):
                     cx, cy, width, height = [float(v) for v in box.xywh[0].tolist()]
                     if width <= 0.0 or height <= 0.0:
                         continue
-                    candidate = (confidence, cx, cy, width, height, class_id)
+                    candidate = (confidence, cx, cy, width, height)
                     if best is None or confidence > best[0]:
                         best = candidate
                 except (TypeError, ValueError, IndexError):
@@ -141,14 +133,16 @@ class GateDetectorNode(Node):
             self._publish_no_detection()
             return
 
-        confidence, cx, cy, width, height, class_id = best
-        msg_out = Float32MultiArray()
-        msg_out.data = [1.0, cx, cy, width, height, confidence, 1.0]
-        self.detection_pub.publish(msg_out)
-        self._log_throttled(
-            'info',
-            f'Gate detected | center=({cx:.1f},{cy:.1f}) | bbox={width:.0f}x{height:.0f} | conf={confidence:.2f}'
-        )
+        confidence, cx, cy, width, height = best
+        detection = GateDetection2D()
+        detection.detected = True
+        detection.center_x_px = cx
+        detection.center_y_px = cy
+        detection.width_px = width
+        detection.height_px = height
+        detection.confidence = confidence
+        self.detection_pub.publish(detection)
+        self._log_throttled('info', f'Gate detected | center=({cx:.1f},{cy:.1f}) | bbox={width:.0f}x{height:.0f} | conf={confidence:.2f}')
 
 
 def main(args=None):
