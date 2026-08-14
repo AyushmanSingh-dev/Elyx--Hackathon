@@ -20,6 +20,7 @@ setup(
             'gate_detector_node = auv_vision.gate_detector_node:main',
             'gate_localizer_node = auv_vision.gate_localizer_node:main',
             'bin_detector_node = auv_vision.bin_detector_node:main',
+            'bin_localizer_node = auv_vision.bin_localizer_node:main',
         ],
     },
 )
