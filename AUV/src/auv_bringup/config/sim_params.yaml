@@ -7,7 +7,7 @@ gate_detector_node:
     confidence_threshold: 0.30
     iou_threshold: 0.70
     image_size: 640
-    device: "0"
+    device: "cpu"
     debug_enabled: true
     debug_directory: ~/auv_ws/debug/yolo
     log_detection_period_s: 1.0
@@ -21,7 +21,7 @@ bin_detector_node:
     confidence_threshold: 0.30
     iou_threshold: 0.70
     image_size: 640
-    device: "0"
+    device: "cpu"
     debug_enabled: true
     debug_directory: ~/auv_ws/debug/yolo
     log_detection_period_s: 1.0
