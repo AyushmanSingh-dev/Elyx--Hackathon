@@ -76,6 +76,8 @@ gate_navigator_node:
     smoothing_window: 5
     min_center_samples: 3
     max_gate_jump_m: 1.00
+    close_range_update_m: 6.00
+    close_range_max_gate_jump_m: 2.00
     camera_offset_fwd_m: 0.30
     camera_offset_left_m: 0.06
     camera_offset_up_m: 0.00
