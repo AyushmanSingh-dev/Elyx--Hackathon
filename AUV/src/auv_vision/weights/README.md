@@ -2,26 +2,25 @@
 
 The trained YOLO checkpoint is the only runtime artifact not stored in this branch.
 
-Place the Kaggle `best.pt` checkpoint here and rename it:
+Place the trained `yolo26n.pt` checkpoint here:
 
 ```text
-AUV/src/auv_vision/weights/gate_detector_v2.pt
+AUV/src/auv_vision/weights/yolo26n.pt
 ```
 
 Expected checkpoint:
-- Source: Kaggle run `underwater_gate_bin_yolo26`
-- File: `best.pt`
-- SHA-256: `565980e76b727960188a4368fa031323fb22a7f2946c3841faa595c77c2cba93`
-- Size: 5,380,064 bytes in the extracted workspace copy
+- Source: the provided Kaggle trained model
+- File: `yolo26n.pt`
+- Classes: `0 = gate`, `1 = bin`
 
-The detector resolves the configured model path relative to the installed
-`auv_vision` package share directory. The `.pt` file is deliberately not
-tracked by Git because the branch's `.gitignore` excludes model binaries.
+Both `gate_detector_node` and `bin_detector_node` use this same two-class checkpoint. The detector resolves the configured model path relative to the installed `auv_vision` package share directory.
+
+The `.pt` binary is not uploaded through the current GitHub integration, so copy the provided checkpoint into this directory before running the full perception simulation.
 
 Before building:
 
 ```bash
-cp /path/to/best.pt AUV/src/auv_vision/weights/gate_detector_v2.pt
+cp /path/to/yolo26n.pt AUV/src/auv_vision/weights/yolo26n.pt
 cd AUV
 colcon build --symlink-install
 source install/setup.bash
