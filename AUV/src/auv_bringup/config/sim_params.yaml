@@ -1,9 +1,23 @@
 gate_detector_node:
   ros__parameters:
-    model_relative_path: weights/gate_detector_v2.pt
+    model_relative_path: weights/yolo26n.pt
     image_topic: /auv/camera/left/image_raw
     detection_topic: /auv/gate_detection_2d
     gate_class_ids: [0]
+    confidence_threshold: 0.30
+    iou_threshold: 0.70
+    image_size: 640
+    device: "0"
+    debug_enabled: true
+    debug_directory: ~/auv_ws/debug/yolo
+    log_detection_period_s: 1.0
+
+bin_detector_node:
+  ros__parameters:
+    model_relative_path: weights/yolo26n.pt
+    image_topic: /auv/camera/left/image_raw
+    detection_topic: /auv/bin_detection_2d
+    bin_class_ids: [1]
     confidence_threshold: 0.30
     iou_threshold: 0.70
     image_size: 640
@@ -19,9 +33,24 @@ gate_localizer_node:
     camera_info_topic: /auv/camera/left/camera_info
     output_topic: /auv/gate_position_3d
     stereo_baseline_m: 0.12
-    camera_offset_fwd_m: 0.30
-    camera_offset_left_m: 0.06
-    camera_offset_up_m: 0.00
+    confidence_threshold: 0.30
+    detection_timeout_s: 0.50
+    disparity_patch_radius_px: 4
+    min_valid_disparity_pixels: 5
+    disparity_min_px: 0.5
+    center_search_radius_px: 12
+    center_search_step_px: 4
+    min_depth_m: 0.30
+    max_depth_m: 30.0
+    log_throttle_s: 1.0
+
+bin_localizer_node:
+  ros__parameters:
+    detection_topic: /auv/bin_detection_2d
+    disparity_topic: /auv/camera/left/disparity
+    camera_info_topic: /auv/camera/left/camera_info
+    output_topic: /auv/bin_position_3d
+    stereo_baseline_m: 0.12
     confidence_threshold: 0.30
     detection_timeout_s: 0.50
     disparity_patch_radius_px: 4
@@ -103,12 +132,13 @@ mission_logger_node:
     odom_topic: /auv/odom
     gate_2d_topic: /auv/gate_detection_2d
     gate_3d_topic: /auv/gate_position_3d
+    bin_2d_topic: /auv/bin_detection_2d
+    bin_3d_topic: /auv/bin_position_3d
     navigator_debug_topic: /auv/navigator_debug
     cmd_vel_topic: /auv/cmd_vel
     log_directory: ~/auv_ws/mission_logs
     logging_hz: 1.0
     flush_every_row: true
-    log_state_transition_immediately: true
 
 mission_monitor_node:
   ros__parameters:
@@ -116,6 +146,7 @@ mission_monitor_node:
     odom_topic: /auv/odom
     gate_detection_topic: /auv/gate_detection_2d
     gate_position_topic: /auv/gate_position_3d
+    bin_position_topic: /auv/bin_position_3d
     navigator_debug_topic: /auv/navigator_debug
     cmd_vel_topic: /auv/cmd_vel
     refresh_hz: 1.0
