@@ -8,12 +8,12 @@
     </link>
     <link name="front_left_camera_link">
       <pose relative_to="base_link">0.3 0.06 0 0 0 0</pose>
-      <sensor name="front_left_camera_sensor" type="camera"><update_rate>15</update_rate><visualize>false</visualize><always_on>true</always_on><topic>/model/auv_box/stereo_front/left/image_raw</topic><camera><horizontal_fov>1.05</horizontal_fov><image><width>640</width><height>480</height></image><clip><near>0.1</near><far>10.0</far></clip></camera></sensor>
+      <sensor name="front_left_camera_sensor" type="camera"><update_rate>15</update_rate><visualize>false</visualize><always_on>true</always_on><topic>/model/auv_box/stereo_front/left/image_raw</topic><camera><horizontal_fov>1.05</horizontal_fov><image><width>640</width><height>480</height></image><clip><near>0.1</near><far>30.0</far></clip></camera></sensor>
     </link>
     <joint name="front_left_camera_joint" type="fixed"><parent>base_link</parent><child>front_left_camera_link</child></joint>
     <link name="front_right_camera_link">
       <pose relative_to="base_link">0.3 -0.06 0 0 0 0</pose>
-      <sensor name="front_right_camera_sensor" type="camera"><update_rate>15</update_rate><visualize>false</visualize><always_on>true</always_on><topic>/model/auv_box/stereo_front/right/image_raw</topic><camera><horizontal_fov>1.05</horizontal_fov><image><width>640</width><height>480</height></image><clip><near>0.1</near><far>10.0</far></clip></camera></sensor>
+      <sensor name="front_right_camera_sensor" type="camera"><update_rate>15</update_rate><visualize>false</visualize><always_on>true</always_on><topic>/model/auv_box/stereo_front/right/image_raw</topic><camera><horizontal_fov>1.05</horizontal_fov><image><width>640</width><height>480</height></image><clip><near>0.1</near><far>30.0</far></clip></camera></sensor>
     </link>
     <joint name="front_right_camera_joint" type="fixed"><parent>base_link</parent><child>front_right_camera_link</child></joint>
     <plugin filename="gz-sim-hydrodynamics-system" name="gz::sim::systems::Hydrodynamics"><link_name>base_link</link_name><water_density>1025.0</water_density><xDotU>0</xDotU><yDotV>0</yDotV><zDotW>0</zDotW><kDotP>0</kDotP><mDotQ>0</mDotQ><nDotR>0</nDotR><xU>0</xU><yV>0</yV><zW>0</zW><kP>0</kP><mQ>0</mQ><nR>0</nR><xUabsU>-33.732</xUabsU><yVabsV>-54.16</yVabsV><zWabsW>-73.225</zWabsW><kPabsP>-3.992</kPabsP><mQabsQ>-3.992</mQabsQ><nRabsR>-3.992</nRabsR></plugin>
